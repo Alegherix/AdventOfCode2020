@@ -35,37 +35,48 @@ function getRow(charArray) {
   return getSeat(charArray, 'F', 'B', 127);
 }
 
-// Tar in char[7]-[9] -> Returnerar Column som int
+// Tar in char[7]-[10] -> Returnerar Column som int
 function getColumn(charArray) {
   return getSeat(charArray, 'L', 'R', 7);
-  //   let lowerLimit = 0;
-  //   let upperLimit = 7;
-
-  //   for (let index = 0; index < charArray.length; index++) {
-  //     const character = charArray[index];
-  //     const toDivide = upperLimit + lowerLimit;
-
-  //     if (character === 'L') {
-  //       upperLimit = Math.floor(toDivide / 2);
-  //     } else if (character === 'R') {
-  //       lowerLimit = Math.round(toDivide / 2);
-  //     }
-
-  //     if (index === charArray.length - 1) {
-  //       const returnChar = character == 'R' ? upperLimit : lowerLimit;
-  //       return returnChar;
-  //       return character === 'L' ? lowerLimit : upperLimit;
-  //     }
-  //   }
 }
 
-splitted.forEach((pass) => console.log(getSeatID(pass)));
+// Call for solution to first
+function getHighestVal() {
+  let highest = 0;
+  splitted.forEach((element) => {
+    const seatVal = getSeatID(element);
+    if (seatVal >= highest) {
+      highest = seatVal;
+    }
+  });
+  console.log(highest);
+}
+// Utility to get lowest val
+function getLowestVal() {
+  let lowest = 1000;
+  splitted.forEach((elem) => {
+    const seatVal = getSeatID(elem);
+    if (lowest >= seatVal) {
+      lowest = seatVal;
+    }
+  });
+  console.log(lowest);
+}
 
-// let highest = 0;
-// splitted.forEach((element) => {
-//   const seatVal = getSeatID(element);
-//   if (seatVal >= highest) {
-//     highest = seatVal;
-//   }
-// });
-// console.log(highest);
+// Utility to create array of all available seats,
+// use this to filter out later
+function getAllSeats() {
+  // HighestVal => 953
+  // LowestVal => 45
+  const arrayToFilter = [];
+  for (let index = 45; index <= 953; index++) {
+    arrayToFilter.push(index);
+  }
+  return arrayToFilter;
+}
+
+function getMySpot() {
+  const takenSeats = splitted.map((seat) => getSeatID(seat));
+  const mySpot = getAllSeats().filter((seat) => !takenSeats.includes(seat));
+  console.log(mySpot);
+}
