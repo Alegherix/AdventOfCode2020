@@ -7,7 +7,6 @@ function getSeatID(boardingPass) {
   const chars = boardingPass.split('');
   const row = getRow(chars.slice(0, 7));
   const column = getColumn(chars.slice(7, 10));
-
   return row * 8 + column;
 }
 
@@ -19,14 +18,12 @@ function getSeat(charArray, charOne, charTwo, upperLimitVal) {
     const character = charArray[index];
     const toDivide = upperLimit + lowerLimit;
 
-    if (character === charOne) {
-      upperLimit = Math.floor(toDivide / 2);
-    } else if (character === charTwo) {
-      lowerLimit = Math.round(toDivide / 2);
-    }
+    character === charOne
+      ? (upperLimit = Math.floor(toDivide / 2))
+      : (lowerLimit = Math.round(toDivide / 2));
+
     if (index === charArray.length - 1) {
-      const returnChar = character == charOne ? lowerLimit : upperLimit;
-      return returnChar;
+      return character == charOne ? lowerLimit : upperLimit;
     }
   }
 }
@@ -40,39 +37,25 @@ function getColumn(charArray) {
   return getSeat(charArray, 'L', 'R', 7);
 }
 
-// Call for solution to first
-function getHighestVal() {
-  let highest = 0;
-  splitted.forEach((element) => {
-    const seatVal = getSeatID(element);
-    if (seatVal >= highest) {
-      highest = seatVal;
-    }
-  });
-  console.log(highest);
+function getVal(mathCallback) {
+  const seats = splitted.map((seat) => getSeatID(seat));
+  return mathCallback(...seats);
 }
+
+function getHighestVal() {
+  return getVal(Math.max);
+}
+
 // Utility to get lowest val
 function getLowestVal() {
-  let lowest = 1000;
-  splitted.forEach((elem) => {
-    const seatVal = getSeatID(elem);
-    if (lowest >= seatVal) {
-      lowest = seatVal;
-    }
-  });
-  console.log(lowest);
+  return getVal(Math.min);
 }
 
 // Utility to create array of all available seats,
 // use this to filter out later
 function getAllSeats() {
-  // HighestVal => 953
-  // LowestVal => 45
-  const arrayToFilter = [];
-  for (let index = 45; index <= 953; index++) {
-    arrayToFilter.push(index);
-  }
-  return arrayToFilter;
+  const allIndexes = [...Array(getHighestVal()).keys()].map((i) => i + 1);
+  return allIndexes.splice(getLowestVal() - 1, getHighestVal());
 }
 
 function getMySpot() {
@@ -80,3 +63,5 @@ function getMySpot() {
   const mySpot = getAllSeats().filter((seat) => !takenSeats.includes(seat));
   console.log(mySpot);
 }
+
+console.log(getHighestVal());
